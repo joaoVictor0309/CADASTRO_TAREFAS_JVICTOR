@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minhas Tarefas ✨</title>
+
+    <!-- FontAwesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS da Aplicação -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="cartao-aplicacao">
+
+        <header class="cabecalho-aplicacao">
+            <h1>Minhas Tarefas </h1>
+            <button id="botao-alterar-tema" class="botao-tema" type="button" aria-label="Alternar tema">
+                <i class="fa-solid fa-moon"></i>
+            </button>
+        </header>
+
+        <!-- Formulário para Adicionar Tarefa -->
+        <div class="caixa-entrada-completa">
+            <input type="text" id="campo-tarefa" placeholder="O que você precisa fazer?..." maxlength="40">
+            
+            <div class="opcoes-tarefa">
+                <select id="select-prioridade" title="Prioridade">
+                    <option value="baixa"> Baixa</option>
+                    <option value="media" selected> Média</option>
+                    <option value="alta"> Alta</option>
+                </select>
+
+                <select id="select-categoria" title="Categoria">
+                    <option value="pessoal"> Pessoal</option>
+                    <option value="estudos"> Estudos</option>
+                    <option value="trabalho"> Trabalho</option>
+                </select>
+
+                <button id="botao-adicionar" type="button" class="botao-principal">
+                    <i class="fa-solid fa-plus"></i> Adicionar
+                </button>
+            </div>
+        </div>
+
+        <!-- Mensagem de Erro -->
+        <p id="mensagem-erro" class="mensagem-erro" hidden></p>
+
+        <!-- Filtros -->
+        <div class="caixa-filtros">
+            <button class="botao-filtro ativo" data-filtro="todas" type="button">Todas</button>
+            <button class="botao-filtro" data-filtro="pendentes" type="button">Pendentes</button>
+            <button class="botao-filtro" data-filtro="concluidas" type="button">Concluídas</button>
+        </div>
+
+        <!-- Lista de Tarefas -->
+        <ul id="lista-tarefas" class="lista-tarefas"></ul>
+
+        <!-- Rodapé -->
+        <footer class="rodape-aplicacao">
+            <span id="contador-tarefas">0 tarefas na lista</span>
+            <button id="botao-limpar-concluidas" type="button" class="botao-limpar">Limpar Concluídas</button>
+        </footer>
+
+    </div>
+
+    <!-- Modal de Confirmação (Corrigido para iniciar escondido) -->
+    <div id="modal-confirmacao" class="modal-backdrop" hidden style="display: none;">
+        <div class="modal-conteudo">
+            <h3>Excluir Tarefa</h3>
+            <p id="modal-texto">Deseja remover esta tarefa?</p>
+            <div class="modal-acoes">
+                <button id="modal-cancelar" type="button" class="btn-modal cancelar">Cancelar</button>
+                <button id="modal-confirmar" type="button" class="btn-modal confirmar">Excluir</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript da Aplicação -->
+    <script src="script.js"></script>
+
+</body>
+
+</html>
