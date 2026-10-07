@@ -13,14 +13,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const botaoModalCancelar = document.getElementById('modal-cancelar');
     const botaoModalConfirmar = document.getElementById('modal-confirmar');
 
+    // Carrega tarefas salvas ou inicia com array vazio
     let tarefas = JSON.parse(localStorage.getItem('tarefas_v2')) || [];
     let filtroAtual = 'todas';
     let idParaExcluir = null;
 
+    // --- PERSISTÊNCIA DAS TAREFAS ---
     function salvar() {
         localStorage.setItem('tarefas_v2', JSON.stringify(tarefas));
     }
 
+    // --- PERSISTÊNCIA DO TEMA ---
+    const temaSalvo = localStorage.getItem('modo-escuro');
+    if (temaSalvo === 'true') {
+        document.body.classList.add('modo-escuro');
+    }
+
+    botaoTema.addEventListener('click', () => {
+        document.body.classList.toggle('modo-escuro');
+        const estaNoModoEscuro = document.body.classList.contains('modo-escuro');
+        localStorage.setItem('modo-escuro', estaNoModoEscuro);
+    });
+
+    // --- FUNÇÃO DE RENDERIZAÇÃO ---
     function renderizar() {
         listaTarefas.innerHTML = '';
 
@@ -54,6 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
         contadorTarefas.textContent = `${pendentes} pendente(s) de ${tarefas.length}`;
     }
 
+    // --- AÇÕES DAS TAREFAS ---
     function adicionarTarefa() {
         const texto = campoTarefa.value.trim();
         if (!texto) {
@@ -83,11 +99,19 @@ document.addEventListener('DOMContentLoaded', () => {
         renderizar();
     };
 
+    // --- MODAL DE CONFIRMAÇÃO ---
     window.confirmarExclusao = function(id) {
         idParaExcluir = id;
         modalTexto.textContent = "Tem certeza que deseja excluir esta tarefa?";
         modalConfirmacao.hidden = false;
+        modalConfirmacao.style.display = 'flex';
     };
+
+    function fecharModal() {
+        modalConfirmacao.hidden = true;
+        modalConfirmacao.style.display = 'none';
+        idParaExcluir = null;
+    }
 
     botaoModalConfirmar.addEventListener('click', () => {
         if (idParaExcluir !== null) {
@@ -95,10 +119,10 @@ document.addEventListener('DOMContentLoaded', () => {
             salvar();
             renderizar();
         }
-        modalConfirmacao.hidden = true;
+        fecharModal();
     });
 
-    botaoModalCancelar.addEventListener('click', () => modalConfirmacao.hidden = true);
+    botaoModalCancelar.addEventListener('click', fecharModal);
 
     botaoLimparConcluidas.addEventListener('click', () => {
         tarefas = tarefas.filter(t => !t.concluida);
@@ -106,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderizar();
     });
 
-    // Filtros
+    // --- FILTROS ---
     document.querySelectorAll('.botao-filtro').forEach(btn => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('.botao-filtro').forEach(b => b.classList.remove('ativo'));
@@ -116,13 +140,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Tema
-    botaoTema.addEventListener('click', () => {
-        document.body.classList.toggle('modo-escuro');
+    // --- EVENT LISTENERS ---
+    botaoAdicionar.addEventListener('click', adicionarTarefa);
+    campoTarefa.addEventListener('keydown', e => { 
+        if (e.key === 'Enter') adicionarTarefa(); 
     });
 
-    botaoAdicionar.addEventListener('click', adicionarTarefa);
-    campoTarefa.addEventListener('keydown', e => { if (e.key === 'Enter') adicionarTarefa(); });
-
+    // Renderização Inicial
     renderizar();
 });
